@@ -12,10 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@WebServlet(name = "StatusServlet", value = "/statuses")
+@WebServlet(name = "StatusServlet", value = "/status")
 public class StatusServlet extends HttpServlet {
 
     @Inject
@@ -34,7 +33,7 @@ public class StatusServlet extends HttpServlet {
 
         try {
             statusService.addStatus(status);
-            response.sendRedirect(request.getContextPath() + "/statuses");
+            response.sendRedirect(request.getContextPath() + "/status");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +49,7 @@ public class StatusServlet extends HttpServlet {
 
         try {
             statusService.updateStatus(updatedStatus);
-            response.sendRedirect(request.getContextPath() + "/statuses");
+            response.sendRedirect(request.getContextPath() + "/status");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +59,7 @@ public class StatusServlet extends HttpServlet {
         UUID id = UUID.fromString(request.getParameter("id"));
         boolean isDeleted = statusService.deleteStatus(id);
         if (isDeleted) {
-            response.sendRedirect(request.getContextPath() + "/statuses");
+            response.sendRedirect(request.getContextPath() + "/status");
         }
     }
 
@@ -89,8 +88,8 @@ public class StatusServlet extends HttpServlet {
 
     private void getStatuses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Status> statuses = statusService.getAllStatuses();
-        request.setAttribute("statuses", statuses);
-        request.getRequestDispatcher("/admin/statuses.jsp").forward(request, response);
+        request.setAttribute("status", statuses);
+        request.getRequestDispatcher("/admin/status.jsp").forward(request, response);
     }
 
     @Override

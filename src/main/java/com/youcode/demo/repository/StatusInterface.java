@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface StatusInterface {
+
     Optional<Status> addStatus(Status status);
     Optional<Status> getStatus(UUID id);
     Optional<Status> updateStatus(Status status);

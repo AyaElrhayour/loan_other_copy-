@@ -66,13 +66,13 @@
 
                 <td>
                     <c:forEach var="reqStatus" items="${request.requestStatus}">
-                        ${reqStatus.status.status}<br/> <!-- Display the status name -->
+                        ${reqStatus.status.status}<br/>
                     </c:forEach>
                 </td>
-                <td>
-                    <button class="update-button" data-requestid="${request.id}">Update</button>
-                    <button class="delete-button" data-requestid="${request.id}">Delete</button>
-                </td>
+                <form action="${pageContext.request.contextPath}/requests" method="get">
+                    <input type="hidden" name="requestId" value="${request.id}">
+                    <button type="submit">View Details</button>
+                </form>
             </tr>
         </c:forEach>
         </tbody>

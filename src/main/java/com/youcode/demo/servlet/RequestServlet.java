@@ -121,23 +121,19 @@ public class RequestServlet extends HttpServlet {
         }
     }
 
-    private void getRequest(HttpServletRequest request, HttpServletResponse response) throws Exception , IOException {
-        String codeParam = request.getParameter("code");
-        if(codeParam != null && !codeParam.isEmpty()){
-            try{
+    private void getRequest(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
+        String codeParam = request.getParameter("requestId");
+        if (codeParam != null && !codeParam.isEmpty()) {
+            try {
                 UUID code = UUID.fromString(codeParam);
                 Request request1 = requestService.getRequestById(code);
-                if(request1 != null){
-                    List<Request> requests = new ArrayList<>();
-                    requests.add(request1);
-                    request.setAttribute("requests", requests);
-                    request.getRequestDispatcher("/requests.jsp").forward(request, response);
-                }else {
+                if (request1 != null) {
+                    request.setAttribute("singleRequest", request1);
+                    request.getRequestDispatcher("/admin/singleRequest.jsp").forward(request, response);
+                } else {
                     request.setAttribute("message", "No Request Found With the Given Id.");
                     request.getRequestDispatcher("/requests.jsp").forward(request, response);
                 }
-            }catch(NumberFormatException e){
-                request.setAttribute("message", "Invalid Request Id.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -152,7 +148,18 @@ public class RequestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        getRequests(request, response);
+        String requestId = request.getParameter("requestId");
+
+
+        if (requestId != null && !requestId.isEmpty()) {
+            try {
+                getRequest(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            getRequests(request, response);
+        }
     }
 
     @Override
@@ -181,13 +188,13 @@ public class RequestServlet extends HttpServlet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case "search":
+           /* case "search":
                 try {
                     getRequest(request, response);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                break;
+                break;*/
         }
     }
 }

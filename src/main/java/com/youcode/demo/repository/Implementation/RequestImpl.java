@@ -41,16 +41,21 @@ public class RequestImpl implements RequestInterface {
 
     @Override
     public Optional<Request> getRequest(UUID id) {
-        EntityTransaction transaction = em.getTransaction();
-        try{
-            transaction.begin();
-            Request request = em.find(Request.class, id);
-            transaction.commit();
-            return Optional.ofNullable(request);
-        }catch (Exception e) {
+        TypedQuery<Request> query = em.createQuery(
+                "SELECT r FROM Request r " +
+                        "LEFT JOIN FETCH r.requestStatus rs " +
+                        "LEFT JOIN FETCH rs.status s " +
+                        "WHERE r.id = :requestId", Request.class);
+
+        query.setParameter("requestId", id);
+        Request request;
+        try {
+            request = query.getSingleResult();
+        } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
+        return Optional.ofNullable(request);
     }
 
 
