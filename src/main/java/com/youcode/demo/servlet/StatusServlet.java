@@ -40,7 +40,7 @@ public class StatusServlet extends HttpServlet {
     }
 
     private void updateStatus(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        UUID id = UUID.fromString(request.getParameter("id"));
+        UUID id = UUID.fromString(request.getParameter("statusId"));
         String statusName = request.getParameter("status");
 
         Status updatedStatus = new Status();

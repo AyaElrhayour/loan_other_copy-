@@ -121,23 +121,11 @@ public class RequestServlet extends HttpServlet {
         }
     }
 
-    private void getRequest(HttpServletRequest request, HttpServletResponse response) throws Exception, IOException {
-        String codeParam = request.getParameter("requestId");
-        if (codeParam != null && !codeParam.isEmpty()) {
-            try {
-                UUID code = UUID.fromString(codeParam);
-                Request request1 = requestService.getRequestById(code);
-                if (request1 != null) {
-                    request.setAttribute("singleRequest", request1);
-                    request.getRequestDispatcher("/admin/singleRequest.jsp").forward(request, response);
-                } else {
-                    request.setAttribute("message", "No Request Found With the Given Id.");
-                    request.getRequestDispatcher("/requests.jsp").forward(request, response);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    private void getRequest(HttpServletRequest request, HttpServletResponse response, String requestId) throws Exception, IOException {
+        Request requestDetails = requestService.getRequestById(UUID.fromString(requestId));
+        request.setAttribute("singleRequest", requestDetails);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/singleRequest.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void getRequests (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -149,11 +137,9 @@ public class RequestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String requestId = request.getParameter("requestId");
-
-
         if (requestId != null && !requestId.isEmpty()) {
             try {
-                getRequest(request, response);
+                getRequest(request, response, requestId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

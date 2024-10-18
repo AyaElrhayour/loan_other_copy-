@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 import java.lang.management.ManagementFactory;
@@ -55,16 +56,25 @@ public class StatusImpl implements StatusInterface {
 
     @Override
     public Optional<Status> updateStatus(Status status) {
-        Status existingStatus = em.find(Status.class, status.getId());
         EntityTransaction transaction = em.getTransaction();
-        if (existingStatus != null) {
-            existingStatus.setStatus(status.getStatus());
+        try {
+            transaction.begin();
+            Status existingStatus = em.find(Status.class, status.getId());
 
-            em.merge(existingStatus);
-            transaction.commit();
-            return Optional.of(existingStatus);
-        }else {
-            transaction.rollback();
+            if (existingStatus != null) {
+                existingStatus.setStatus(status.getStatus());
+                em.merge(existingStatus);
+                transaction.commit();
+                return Optional.of(existingStatus);
+            } else {
+                transaction.rollback();
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             return Optional.empty();
         }
     }
