@@ -35,29 +35,14 @@ public class RequestStatusService {
     }
 
 
-    public void updateRequestStatus(UUID id) throws Exception {
-        if (requestId == null || statusId == null) {
-            throw new Exception("Request ID and Status ID can't be null.");
+    public void updateRequestStatus(UUID id, RequestStatus requestStatus) throws Exception {
+        if (id == null || id.toString().isEmpty()) {
+            throw new Exception("Request status ID can't be empty or null.");
         }
-        Optional<RequestStatus> existingRequestStatus = requestStatusInterface.getRequestStatus(requestId);
-
-        if (existingRequestStatus.isPresent()) {
-            boolean removed = requestStatusInterface.removeRequestStatus(statusId);
-            if (!removed) {
-                throw new Exception("Failed to remove the existing status.");
-            }
-
-            RequestStatus newRequestStatus = new RequestStatus();
-
-            newRequestStatus.setRequest(existingRequestStatus.get().getRequest());
-            Status newStatus = new Status();
-            newStatus.setId(statusId);
-            newRequestStatus.setStatus(newStatus);
-            newRequestStatus.setUpdatedAt(LocalDateTime.now());
-
-            requestStatusInterface.insertRequestStatus(newRequestStatus);
-        } else {
-            throw new Exception("Request status not found for the provided request ID.");
+        if (requestStatus == null) {
+            throw new Exception("Invalid request status information.");
         }
+        requestStatusInterface.updateRequestStatus(id, requestStatus)
+                .orElseThrow(() -> new Exception("Failed to update request status."));
     }
 }

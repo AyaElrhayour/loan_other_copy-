@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface RequestStatusInterface {
  Optional<RequestStatus>insertRequestStatus(RequestStatus requestStatus);
  Optional<RequestStatus> getRequestStatus(UUID id);
- boolean removeRequestStatus(UUID statusId);
+ Optional<RequestStatus> updateRequestStatus(UUID id, RequestStatus updatedRequestStatus);
 }

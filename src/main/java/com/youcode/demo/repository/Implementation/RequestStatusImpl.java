@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,23 +54,28 @@ public class RequestStatusImpl implements RequestStatusInterface {
     }
 
     @Override
-    public boolean removeRequestStatus(UUID statusId) {
+    public Optional<RequestStatus> updateRequestStatus(UUID id, RequestStatus updatedRequestStatus) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            RequestStatus requestStatus = em.find(RequestStatus.class, statusId);
-            if (requestStatus != null) {
-                em.remove(requestStatus);
+            RequestStatus existingRequestStatus = em.find(RequestStatus.class, id);
+            if (existingRequestStatus != null) {
+                existingRequestStatus.setRequest(updatedRequestStatus.getRequest());
+                existingRequestStatus.setStatus(updatedRequestStatus.getStatus());
+                existingRequestStatus.setReason(updatedRequestStatus.getReason());
+                existingRequestStatus.setUpdatedAt(LocalDateTime.now());
+
+                em.merge(existingRequestStatus);
                 tx.commit();
-                return true;
+                return Optional.of(existingRequestStatus);
             } else {
                 tx.rollback();
-                return false;
+                return Optional.empty();
             }
         } catch (Exception e) {
             e.printStackTrace();
             tx.rollback();
-            return false;
+            return Optional.empty();
         }
     }
 }

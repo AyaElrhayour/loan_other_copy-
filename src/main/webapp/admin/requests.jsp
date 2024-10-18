@@ -6,19 +6,9 @@
     <title>Requests</title>
 </head>
 <body>
-<header class="header">
-    <nav class="nav">
-        <img src="./img/icon.png" alt="Bank logo" class="nav__logo" id="logo" data-version-number="3.0" />
-        <ul class="nav__links">
-            <li class="nav__item"><a class="nav__link" href="${pageContext.servletContext.contextPath}">Home</a></li>
-            <li class="nav__item"><a class="nav__link" href="${pageContext.servletContext.contextPath}/clients">Clients</a></li>
-            <li class="nav__item"><a class="nav__link" href="${pageContext.servletContext.contextPath}/employees">Employees</a></li>
-            <li class="nav__item"><a class="nav__link nav__link--btn btn--show-modal" href="${pageContext.servletContext.contextPath}/simulations">Simulate a credit</a></li>
-        </ul>
-    </nav>
-</header>
+
 <div class="content">
-    <button class="add-button">Add Request</button>
+
     <div class="search-container">
         <form action="${pageContext.request.contextPath}/requests?action=search" method="POST">
             <input type="search" id="requestSearch" name="code" placeholder="Search by code...">

@@ -28,14 +28,14 @@
     <tr>
       <td>${req.status.status}</td>
       <td>
-        <form action="${pageContext.request.contextPath}/status?action=update" method="post" class="d-inline">
-          <input type="hidden" name="statusId" value="${req.status.id}">
-          <input type="hidden" name="status" value="Approved">
+        <form action="${pageContext.request.contextPath}/requestStatus?action=update" method="post" class="d-inline">
+          <input type="hidden" name="requestStatusId" value="${req.id}">
+          <input type="hidden" name="status" value="APPROVED">
           <button type="submit" class="btn btn-success">Approve</button>
         </form>
-        <form action="${pageContext.request.contextPath}/status?action=update" method="post" class="d-inline ms-2">
-          <input type="hidden" name="statusId" value="${req.status.id}">
-          <input type="hidden" name="status" value="Declined">
+        <form action="${pageContext.request.contextPath}/requestStatus?action=update" method="post" class="d-inline ms-2">
+          <input type="hidden" name="requestStatusId" value="${req.id}">
+          <input type="hidden" name="status" value="DECLINED">
           <button type="submit" class="btn btn-danger">Decline</button>
         </form>
       </td>
